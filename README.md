@@ -33,7 +33,7 @@ Ensure you have Python 3.8+ installed on your system.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/send-me-a-message.git
+git clone https://github.com/Faridrhmn/send-me-a-message.git
 cd send-me-a-message
 ```
 
