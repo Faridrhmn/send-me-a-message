@@ -132,23 +132,24 @@ def backup_messages():
                 f.write(f"[{msg.timestamp}] {msg.content}\n")
         print(f"Backup completed at {datetime.datetime.now()}")
 
+with app.app_context():
+    db.create_all()
+    # Create or update default admin user from environment variables
+    admin_username = os.environ.get('ADMIN_USERNAME', 'admin')
+    admin_password = os.environ.get('ADMIN_PASSWORD', 'defaultpassword')
+    
+    admin_user = User.query.first()
+    if not admin_user:
+        hashed_pw = generate_password_hash(admin_password, method='pbkdf2:sha256')
+        admin_user = User(username=admin_username, password=hashed_pw)
+        db.session.add(admin_user)
+        db.session.commit()
+    else:
+        admin_user.username = admin_username
+        admin_user.password = generate_password_hash(admin_password, method='pbkdf2:sha256')
+        db.session.commit()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-        # Create or update default admin user from environment variables
-        admin_username = os.environ.get('ADMIN_USERNAME', 'admin')
-        admin_password = os.environ.get('ADMIN_PASSWORD', 'defaultpassword')
-        
-        admin_user = User.query.first()
-        if not admin_user:
-            hashed_pw = generate_password_hash(admin_password, method='pbkdf2:sha256')
-            admin_user = User(username=admin_username, password=hashed_pw)
-            db.session.add(admin_user)
-            db.session.commit()
-        else:
-            admin_user.username = admin_username
-            admin_user.password = generate_password_hash(admin_password, method='pbkdf2:sha256')
-            db.session.commit()            
     # Schedule backup every 1 month (approx 30 days)
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=backup_messages, trigger="interval", days=30)
