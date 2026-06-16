@@ -21,7 +21,6 @@ Constructive criticism, random rants, or untold stories—everything is welcome,
 - **Backend**: Python 3, Flask, Flask-SQLAlchemy, Flask-Login
 - **Frontend**: HTML5, Vanilla CSS (Glassmorphism), JavaScript (Fetch API)
 - **Database**: SQLite3
-- **AI/NLP**: `transformers` (HuggingFace), `vaderSentiment`, `langdetect`
 - **Automation**: `APScheduler`
 - **Environment**: `python-dotenv`
 
@@ -71,7 +70,7 @@ The database (`messages.db`) will be automatically initialized and empty upon th
 
 ```text
 send-me-a-message/
-├── app.py                  # Main Flask application and AI logic
+├── app.py                  # Main Flask application
 ├── requirements.txt        # Python dependencies
 ├── .env.example            # Environment variables template
 ├── instance/               # Auto-generated folder containing the SQLite DB

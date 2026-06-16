@@ -49,107 +49,18 @@ except ImportError:
     vader_analyzer = None
 
 # Setup Local AI Model for Offline & Fast Generation
-try:
-    from transformers import pipeline
-    print("Memuat model AI lokal (Offline)...")
-    # Menggunakan model Sentimen Analisis Bahasa Indonesia yang sangat kecil dan ringan
-    sentiment_analyzer = pipeline("sentiment-analysis", model="w11wo/indonesian-roberta-base-sentiment-classifier")
-except Exception as e:
-    print(f"Model lokal belum terinstal atau gagal dimuat: {e}")
-    sentiment_analyzer = None
+# Dihapus karena model transformers terlalu berat untuk server 2 core
+sentiment_analyzer = None
 
 # Free AI / Contextual Reply Function using Local Model (Bilingual)
 def generate_reply(message_text):
-    # --- INDONESIAN REPLIES (Merespons pujian/kritik untuk Pemilik Web) ---
-    id_positive = [
-        "Terima kasih banyak atas kata-kata baikmu! Ini benar-benar membuat hariku lebih cerah. ✨",
-        "Wah, aku sangat menghargai pesan positif ini. Terima kasih banyak ya! 😊",
-        "Pesanmu sangat berarti buatku. Terima kasih sudah mampir dan memberikan dukungan! ❤️",
-        "Aww, kamu baik sekali! Terima kasih atas energi positifnya! 🚀"
-    ]
-    id_negative = [
-        "Terima kasih atas tanggapan dan kejujuranmu. Aku sangat menghargainya dan akan berusaha lebih baik lagi. 🙏",
-        "Maaf jika ada yang kurang berkenan. Masukan darimu sangat berarti untuk perkembanganku. 💪",
-        "Terima kasih sudah meluangkan waktu untuk memberikan kritik. Ini akan jadi bahan evaluasi buatku! 🌱",
-        "Aku membaca pesanmu. Terima kasih atas kejujurannya, aku akan terus belajar menjadi lebih baik. 🤝"
-    ]
-    id_neutral = [
-        "Halo! Terima kasih banyak sudah mampir dan meninggalkan pesan di sini. 💌",
-        "Senang sekali melihatmu mampir! Pesanmu sudah tersimpan dengan aman. 🌻",
-        "Terima kasih sudah meninggalkan jejak di sini. Semoga harimu menyenangkan! 📝",
-        "Pesan diterima! Terima kasih banyak atas waktunya. 🕊️"
-    ]
-
-    # --- ENGLISH REPLIES (Responding to compliments/critique for the Web Owner) ---
-    en_positive = [
-        "Thank you so much for the kind words! It truly makes my day. ✨",
-        "Wow, I really appreciate this positive message. Thank you! 😊",
-        "Your message means a lot to me. Thanks for stopping by and showing support! ❤️",
-        "Aww, you are too kind! Thanks for the positive energy! 🚀"
-    ]
-    en_negative = [
-        "Thank you for your honest feedback. I really appreciate it and will try to do better. 🙏",
-        "I'm sorry if I fell short. Your input means a lot for my personal growth. 💪",
-        "Thanks for taking the time to share your critique. I'll use this to improve myself! 🌱",
-        "I've read your message. Thanks for your honesty, I will keep learning and improving. 🤝"
-    ]
     en_neutral = [
         "Hello! Thank you so much for dropping by and leaving a message. 💌",
         "So glad to see you here! Your message has been safely saved. 🌻",
         "Thanks for leaving your mark here. Hope you have a wonderful day! 📝",
         "Message received! Thank you so much for your time. 🕊️"
     ]
-
-    # Detect language
-    try:
-        # Provide enough context for langdetect
-        lang = detect(message_text + " " + message_text)
-    except:
-        lang = 'id'
-        
-    is_english = (lang == 'en')
-    
-    pos_replies = en_positive if is_english else id_positive
-    neg_replies = en_negative if is_english else id_negative
-    neu_replies = en_neutral if is_english else id_neutral
-    
-    # Sentiment Analysis
-    try:
-        label = 'neutral'
-        if is_english and vader_analyzer:
-            score = vader_analyzer.polarity_scores(message_text)
-            compound = score['compound']
-            if compound >= 0.05:
-                label = 'positive'
-            elif compound <= -0.05:
-                label = 'negative'
-        elif not is_english and sentiment_analyzer:
-            result = sentiment_analyzer(message_text)[0]
-            label = result['label']
-            
-        if label == 'positive':
-            return random.choice(pos_replies)
-        elif label == 'negative':
-            return random.choice(neg_replies)
-        else:
-            return random.choice(neu_replies)
-    except Exception as e:
-        print(f"Local AI Error: {e}")
-        
-    # Fallback to simple rule-based if AI models fail
-    text = message_text.lower()
-    if is_english:
-        if any(word in text for word in ['sad', 'disappointed', 'cry', 'bad', 'fail', 'broken', 'tired', 'hurt']):
-            return random.choice(neg_replies)
-        elif any(word in text for word in ['happy', 'glad', 'success', 'good', 'cool', 'love', 'fun']):
-            return random.choice(pos_replies)
-    else:
-        if any(word in text for word in ['sedih', 'kecewa', 'menangis', 'buruk', 'gagal', 'hancur', 'capek', 'lelah', 'sakit']):
-            return random.choice(neg_replies)
-        elif any(word in text for word in ['senang', 'bahagia', 'sukses', 'berhasil', 'baik', 'keren', 'cinta', 'seru']):
-            return random.choice(pos_replies)
-            
-    return random.choice(neu_replies)
+    return random.choice(en_neutral)
 
 # Routes
 @app.route('/')
