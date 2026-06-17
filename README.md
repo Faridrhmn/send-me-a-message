@@ -86,7 +86,7 @@ send-me-a-message/
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/send-me-a-message/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Faridrhmn/send-me-a-message/issues).
 
 ## 📝 License
 
