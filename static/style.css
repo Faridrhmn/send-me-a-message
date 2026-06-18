@@ -1,12 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
-    --bg-gradient-1: #0f172a;
-    --bg-gradient-2: #1e1b4b;
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --primary-color: #6366f1;
-    --primary-hover: #4f46e5;
+    /* 1. Palet Warna (Color Palette) */
+    --bg-main: #e2e8f0; /* Latar Belakang: slate-200 (sedikit lebih gelap agar card lebih pop-out) */
+    --text-primary: #0f172a; /* Teks Utama: slate-900 */
+    --text-secondary: #475569; /* Teks Sekunder: slate-600 */
+    --primary-color: #138d82; /* Aksen Utama: Teal / Hijau Kebiruan */
+    --primary-hover: #0f766e;
+    
+    /* 2. Efek Visual & Gaya */
+    --glass-border: #cbd5e1; /* border-slate-300 (mempertegas garis batas) */
 }
 
 * {
@@ -15,39 +18,15 @@
     box-sizing: border-box;
 }
 
+/* 3. Tipografi (Font) */
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
-    background-attachment: fixed;
+    background-color: var(--bg-main);
     color: var(--text-primary);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-}
-
-/* Background Animated Blobs */
-body::before, body::after {
-    content: '';
-    position: fixed;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    filter: blur(80px);
-    z-index: -1;
-    opacity: 0.6;
-}
-
-body::before {
-    background: #6366f1;
-    top: -100px;
-    left: -100px;
-}
-
-body::after {
-    background: #c026d3;
-    bottom: -100px;
-    right: -100px;
 }
 
 .container {
@@ -73,34 +52,44 @@ header {
 .logo {
     width: 60px;
     margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(19, 141, 130, 0.2));
 }
 
 header h1 {
     font-size: 2.5rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #a5b4fc, #fbcfe8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-primary);
 }
 
 header p {
     color: var(--text-secondary);
     font-size: 1.1rem;
+    line-height: 1.6;
 }
 
-.glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
+/* Clean Cards */
+.card, .glass-card {
+    background: #ffffff; /* Latar belakang putih solid */
+    border: 1px solid var(--glass-border); /* Border sangat tipis dan pudar */
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    transition: all 0.3s ease;
+    animation: fadeInUp 1s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 }
 
-.card {
-    padding: 2.5rem;
-    animation: fadeInUp 1s ease;
+.card:hover, .glass-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); /* hover:shadow-lg */
+    transform: translateY(-2px);
+}
+
+/* Glassmorphism Utilities */
+.glass {
+    background: rgba(255, 255, 255, 0.7) !important; /* bg-white/70 */
+    backdrop-filter: blur(24px); /* backdrop-blur-xl */
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border) !important;
 }
 
 form {
@@ -111,8 +100,8 @@ form {
 
 textarea, input[type="text"], input[type="password"] {
     width: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bg-main);
+    border: 1px solid var(--glass-border);
     border-radius: 12px;
     padding: 1.2rem;
     color: var(--text-primary);
@@ -122,10 +111,27 @@ textarea, input[type="text"], input[type="password"] {
     transition: all 0.3s ease;
 }
 
+textarea::placeholder, input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
 textarea:focus, input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 0 3px rgba(19, 141, 130, 0.15); /* Teal glow tipis */
+    background: #ffffff;
+}
+
+/* Pulse Glow Animation Utility */
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(19, 141, 130, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(19, 141, 130, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(19, 141, 130, 0); }
+}
+
+.pulse-glow {
+    animation: pulse-glow 2s infinite;
 }
 
 button {
@@ -143,16 +149,25 @@ button {
 button:hover {
     background: var(--primary-hover);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(19, 141, 130, 0.25);
+}
+
+button:focus {
+    animation: pulse-glow 1.5s infinite;
+    outline: none;
 }
 
 .secondary-btn {
     background: transparent;
+    color: var(--primary-color);
     border: 1px solid var(--primary-color);
     margin-top: 1rem;
 }
 
 .secondary-btn:hover {
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(19, 141, 130, 0.05);
+    color: var(--primary-hover);
+    box-shadow: none;
 }
 
 .hidden {
@@ -166,13 +181,14 @@ button:hover {
 
 #replyContainer h3 {
     margin-bottom: 1rem;
-    color: #a5b4fc;
+    color: var(--primary-color);
 }
 
 #aiReply {
     font-size: 1.2rem;
     line-height: 1.6;
     margin-bottom: 2rem;
+    color: var(--text-primary);
 }
 
 footer {
@@ -185,10 +201,13 @@ footer {
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.3s ease;
+    border-bottom: 1px solid transparent;
 }
 
+/* Indikator Navigasi / Tautan Aktif */
 .login-link:hover, .back-link:hover {
     color: var(--primary-color);
+    border-bottom: 1px solid var(--primary-color);
 }
 
 /* Login Page */
@@ -200,6 +219,7 @@ footer {
 
 .login-card h2 {
     margin-bottom: 2rem;
+    color: var(--text-primary);
 }
 
 .login-card form {
@@ -210,15 +230,15 @@ footer {
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
-    background: rgba(239, 68, 68, 0.2);
-    color: #fca5a5;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
 }
 
 .alert-success {
-    background: rgba(34, 197, 94, 0.2);
-    color: #86efac;
-    border: 1px solid rgba(34, 197, 94, 0.3);
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
 }
 
 /* Admin Dashboard */
@@ -237,17 +257,24 @@ footer {
     margin-bottom: 2rem;
 }
 
+.admin-header h1 {
+    color: var(--text-primary);
+}
+
 .logout-btn {
-    background: rgba(239, 68, 68, 0.2);
-    color: #fca5a5;
+    background: #fee2e2;
+    color: #991b1b;
     padding: 0.8rem 1.5rem;
     border-radius: 8px;
     text-decoration: none;
     transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .logout-btn:hover {
-    background: rgba(239, 68, 68, 0.4);
+    background: #fecaca;
+    box-shadow: none;
+    transform: none;
 }
 
 .messages-grid {
@@ -276,6 +303,7 @@ footer {
 
 .delete-btn {
     background: transparent;
+    color: #ef4444;
     border: none;
     padding: 0.3rem;
     font-size: 1.2rem;
@@ -286,11 +314,13 @@ footer {
 .delete-btn:hover {
     transform: scale(1.2) translateY(0);
     background: transparent;
+    box-shadow: none;
 }
 
 .message-card .content {
     line-height: 1.6;
     word-wrap: break-word;
+    color: var(--text-primary);
 }
 
 @keyframes fadeInDown {

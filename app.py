@@ -15,6 +15,17 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///messages.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+@app.after_request
+def add_header(response):
+    """
+    Add headers to prevent browser caching so that users cannot use the back button
+    to view protected pages after logging out.
+    """
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
+
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)

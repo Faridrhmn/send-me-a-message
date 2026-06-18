@@ -22,7 +22,7 @@
         </header>
 
         <main>
-            <div class="card glass">
+            <div class="glass-card">
                 <form id="messageForm">
                     <textarea id="messageBox" rows="5" placeholder="Write whatever is on your mind..."
                         required></textarea>
@@ -30,7 +30,7 @@
                 </form>
             </div>
 
-            <div id="replyContainer" class="card glass hidden">
+            <div id="replyContainer" class="glass-card hidden">
                 <h3>Reply for you:</h3>
                 <p id="aiReply"></p>
                 <button id="writeAnotherBtn" class="secondary-btn">Write Another Message</button>
@@ -38,9 +38,9 @@
         </main>
     </div>
 
-    <footer>
+    <!-- <footer>
         <a href="{{ url_for('login') }}" class="login-link">Admin Login</a>
-    </footer>
+    </footer> -->
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
